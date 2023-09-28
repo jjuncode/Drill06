@@ -15,6 +15,7 @@ character_x,character_y = mouse_x,mouse_y
 mouse_list = []
 quit = False
 hide_cursor()
+distn = 0
 
 class Ani:
     cur_frame =0
@@ -41,19 +42,22 @@ def SetFrame():
     if (Ani.cur_frame > Ani.max_frame[Ani.cur_ani]):    # Frame reset
         Ani.cur_frame =0
 def MoveCharacter():
-    global character_x, character_y,mouse_x,mouse_y,move_speed
+    global character_x, character_y,mouse_x,mouse_y,distn
 
     if len(mouse_list) > 0:
-        if character_x < mouse_x :
+        if character_x < mouse_list[0][0] :
             Ani.cur_ani = 0
         else :
             Ani.cur_ani = 2
-        for i in range(0,100+1):
-            t = i/100
-            character_x = (1-t)*mouse_list[0][0] + t*mouse_list[0][0]
-            character_y = (1-t)*mouse_list[0][1] + t*mouse_list[0][1]
+        distn += 1
+        if distn > 100:
+            mouse_list.pop(0)
+            distn = 0
+        else:
+            t = distn/100
+            character_x = (1-t)*character_x + t*mouse_list[0][0]
+            character_y = (1-t)*character_y + t*mouse_list[0][1]
             DrawCharacter()
-        mouse_list.pop(0)
 
 
 def handle_event():
