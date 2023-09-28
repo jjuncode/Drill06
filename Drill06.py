@@ -27,11 +27,13 @@ class Ani:
 def Render():
     global mouse_x,mouse_y,character_x,character_y
     clear_canvas()
-    TUK_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
+    DrawBackground()
     DrawCursor()    # cursor draw
-    MoveCharacter() # character move
     DrawCharacter() # character draw
     update_canvas()
+
+def DrawBackground():
+    TUK_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
 
 def DrawCharacter():
     SetFrame()  # animation
@@ -47,7 +49,7 @@ def MoveCharacter():
     if len(mouse_list) > 0:
         if character_x < mouse_list[0][0] :
             Ani.cur_ani = 0
-        else :
+        elif character_x > mouse_list[0][0] :
             Ani.cur_ani = 2
         distn += 1
         if distn > 100:
@@ -83,6 +85,7 @@ def DrawCursor():
 def main():
     while (not quit):
         handle_event()
+        MoveCharacter()  # character move
         Render()
 
     close_canvas()
