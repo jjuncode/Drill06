@@ -11,11 +11,16 @@ mouse = load_image('hand_arrow.png')
 character = load_image('sprite.png')
 
 mouse_x, mouse_y = TUK_WIDTH // 2, TUK_HEIGHT // 2
-character_x,character_y = mouse_x,mouse_y
 mouse_list = []
-quit = False
 hide_cursor()
-distn = 0
+
+character_x,character_y = mouse_x,mouse_y
+quit = False
+
+class lineMove:
+    speed = 0.3
+    distn = 0
+    start_pos = character_x,character_y
 
 class Ani:
     cur_frame =0
@@ -51,14 +56,16 @@ def MoveCharacter():
             Ani.cur_ani = 0
         elif character_x > mouse_list[0][0] :
             Ani.cur_ani = 2
-        distn += 1
-        if distn > 100:
+        lineMove.distn += lineMove.speed
+
+        if lineMove.distn >= 100:
+            lineMove.start_pos = mouse_list[0] # 현재 위치를 갱신
             mouse_list.pop(0)
-            distn = 0
+            lineMove.distn = 0
         else:
-            t = distn/100
-            character_x = (1-t)*character_x + t*mouse_list[0][0]
-            character_y = (1-t)*character_y + t*mouse_list[0][1]
+            t = lineMove.distn/100
+            character_x = (1-t)*lineMove.start_pos[0] + t*mouse_list[0][0]
+            character_y = (1-t)*lineMove.start_pos[1] + t*mouse_list[0][1]
             DrawCharacter()
 
 
